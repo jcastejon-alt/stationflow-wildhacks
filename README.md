@@ -6,7 +6,7 @@ StationFlow is an independent WildHacks prototype for ordering ahead at Trevecca
 
 ## Why we built it
 
-The idea came from a practical question: could students order around class instead of arriving at a counter before they know when food will be ready? There is a staff side to that question too. If remote orders arrive as paper slips, an employee spends paid work time printing, cutting, and sorting tickets. Each slip also uses paper and ink. StationFlow explores a shared digital queue and a direct ready signal. We have not measured current printing volume, labor, wait times, or potential savings with Dining Services; those are questions for a pilot, not results of this prototype.
+Ordering ahead only helps if students know when to show up and staff can work from a clear queue. Where orders come through as printed slips, an employee still has to print, cut, and sort them. That takes paid work time, paper, and ink. StationFlow puts each ticket in the right counter's queue and gives the student a direct ready signal. We have not measured current printing volume, labor, wait times, or potential savings with Dining Services; those are questions for a pilot, not results of this prototype.
 
 Trevecca already promotes Everyday for dining. Before proposing another live ordering channel, we would need to compare its actual coverage at each campus station and learn where the gap is. See the [dining research](docs/RESEARCH_DINING_V2.md).
 
@@ -64,7 +64,7 @@ The local [final review](docs/FINAL_REVIEW_V11.md) recorded 80 passing automated
 
 ## Demo and pilot boundary
 
-The [live demo](https://stationflow-demo.fihnechn.workers.dev) runs on Cloudflare with shared persisted demo state. Its accounts are deliberately public. Anyone who knows a fictional ID can enter that profile, so do not use real student data. The student and worker flow has been checked in two desktop browsers; the experience on physical phones and iPads has not yet been verified.
+The [live demo](https://stationflow-demo.fihnechn.workers.dev) runs on Cloudflare with shared persisted demo state; the [demo operations guide](docs/PUBLIC_DEMO_RELEASE.md) has the rehearsal steps. Its accounts are deliberately public. Anyone who knows a fictional ID can enter that profile, so do not use real student data. The student and worker flow has been checked in two desktop browsers; the experience on physical phones and iPads has not yet been verified.
 
 Before a campus pilot, we would need verified student authentication, Dining-approved station menus and hours, current prices and exchange rules, an approved POS/payment procedure or integration, accessibility and device testing, and an operating plan for cancellations, refunds, closures, and support. StationFlow does not claim those are solved. The prototype tests whether the student-to-staff flow is understandable and useful enough to pursue that work.
 

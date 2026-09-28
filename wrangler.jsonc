@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "stationflow-demo",
+  "main": "./worker/index.js",
+  "compatibility_date": "2026-09-27",
+  "vars": { "PUBLIC_ORIGIN": "https://stationflow-demo.fihnechn.workers.dev" },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api", "/api/*"]
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "STATION_DB", "class_name": "StationDatabase" }]
+  },
+  "exports": { "StationDatabase": { "type": "durable-object", "storage": "sqlite" } }
+}

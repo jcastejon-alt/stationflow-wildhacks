@@ -1,49 +1,32 @@
 # Public demo operations
 
-## What is public
+**Live demo:** [stationflow-demo.fihnechn.workers.dev](https://stationflow-demo.fihnechn.workers.dev)
 
-The current demo URL is [https://editor-criterion-banners-providers.trycloudflare.com](https://editor-criterion-banners-providers.trycloudflare.com). It is a Cloudflare Quick Tunnel to the Express server running on Jorge's Mac. The URL is temporary and may change when the tunnel restarts. The Mac, tunnel process and application server must remain online; stopping or sleeping the Mac takes the demo offline. This is a fictional prototype, not a Trevecca or Sodexo service. Do not enter real student information.
+This URL runs on Cloudflare Workers. The same Worker serves the website and its `/api` routes; one SQLite-backed Durable Object holds the shared demo orders, sessions, station settings, and presentation clock. The old Quick Tunnel and the Mac-based Express server are no longer needed for this URL. Deploying a new version does not clear the Durable Object's existing tickets.
 
-The demo uses its own ignored database at `data/stationflow-cloud-demo.sqlite`, separate from the normal local database. It contains fictional demo activity only.
+This is an independent, fictional prototype. The public student IDs and worker entrances are for judges to try. Do not enter real student information, and do not treat a displayed payment or meal swipe as a campus transaction.
 
-## Start or restart
+## Rehearse the phone-to-tablet flow
 
-Run commands from the project root. Keep each process running in its own terminal. If the app or tunnel restarts, repeat these steps and update anyone using the link if the Quick Tunnel URL changes.
+Use different browser profiles or devices for the student and worker. Two tabs in one browser profile share a session cookie, so signing in on one tab switches the other tab's account.
 
-1. Build the frontend:
+1. If the venue is closed at rehearsal time, open [Manager / demo setup](https://stationflow-demo.fihnechn.workers.dev/staff/login), sign in as `manager` with the public demo password `CampusDemo!26`, and choose **Lunch** under Station controls. The shared demo clock keeps advancing from that preset and survives a Worker restart. Choose **Breakfast** for an Omelet demonstration or **Live** to return to the actual Central time.
+2. On the phone, open [student login](https://stationflow-demo.fihnechn.workers.dev/login), enter fictional ID `10001`, and order a Hub burger or Chicken tenders with the one-item demo meal exchange. Choose a pickup window and leave the ticket open.
+3. On the tablet, open [staff login](https://stationflow-demo.fihnechn.workers.dev/staff/login) and tap **The Hub**. Its panel shows only that location's current online orders. Tap **Accept** after the represented POS entry, then **Mark ready** when the simulated order is finished.
+4. The student's open ticket refreshes from the same backend and displays the preparing and ready states. The ready alert works while that page is open and awake. There is no background push with the phone locked or browser closed.
 
-   ```sh
-   npm run build
-   ```
+The Cafeteria route works the same way: select Cafeteria on the worker tablet and choose Omelet, Hamburger, or Sandwich on the student side. The grill changes from Omelet to Hamburger at 11 AM in the demo service schedule. Cafeteria tickets do not use a separate meal swipe at the station; admission is assumed to happen at the dining hall entrance.
 
-2. Start a Quick Tunnel to the loopback app port:
+## Deploy an update
 
-   ```sh
-   cloudflared tunnel --url http://127.0.0.1:3003
-   ```
+From this repository, with Wrangler authenticated to the intended Cloudflare account:
 
-   Copy the HTTPS `trycloudflare.com` URL printed by `cloudflared`. That exact origin is needed by the app. The current verified URL is `https://editor-criterion-banners-providers.trycloudflare.com`.
+```sh
+npm ci
+npm test
+npm run cf:deploy
+```
 
-3. In a second terminal, start the server with that exact URL as `PUBLIC_ORIGIN`:
+`cf:deploy` builds the frontend and deploys the Worker and static assets. The `PUBLIC_ORIGIN` in [`wrangler.jsonc`](../wrangler.jsonc) must match the exact HTTPS demo origin. `npm run cf:dev` runs a local Worker with a separate local Durable Object database under `.wrangler/`; it does not alter the public demo state. The Node/SQLite development server remains available through `npm run dev`.
 
-   ```sh
-   HOST=127.0.0.1 PORT=3003 DB_PATH=data/stationflow-cloud-demo.sqlite PUBLIC_ORIGIN=https://editor-criterion-banners-providers.trycloudflare.com node server/index.js
-   ```
-
-   If Cloudflare prints a different URL, replace the origin above with the new URL, without a trailing slash. Start the tunnel first so its URL is known before starting the server.
-
-4. Open the public URL and sign in as a manager to select the **Lunch** preset for the Hub rehearsal. Restarting the server resets simulated time to the live clock, so select Lunch again after each restart.
-
-## Rehearsal flow
-
-Use separate browser profiles or devices for the student and staff sessions, since cookies are shared among tabs in one browser profile. Keep the student ticket page open during the staff status changes.
-
-1. In the student profile, open `/login` and enter fictional student ID `10001` (no student password). Place a sample meal-swipe order at The Hub.
-2. In the separate staff profile, open `/staff/login`, choose the Hub staff entry and use the public fictional demo password `CampusDemo!26`.
-3. Confirm the ticket appears in the Hub staff inbox, then use **Accept** and **Mark ready**. The student ticket should update to its ready state.
-
-The public demo flow was verified through the Quick Tunnel: student order `250438` appeared in the staff inbox, and the staff actions changed it through preparing/payment approved to ready. These are fictional records and simulated payment states; no real account, charge, or meal swipe is involved.
-
-## Event links
-
-WildHacks' September 27 announcement asks for submission before **11:59 PM September 27**; the time zone is unconfirmed. Make the GitHub repository and demo URL public, then provide their links through the Discord [Submission form](https://forms.gle/kcRmrFY3XbdjH5iQ9). The separate form link in the email is for registration.
+On September 27, the live Worker passed a two-session API walkthrough and a browser walkthrough with separate student and worker sessions. In the browser test, a Hub Chicken tenders meal-exchange ticket appeared in the Hub inbox without reloading; **Accept** changed the student's ticket to preparing with demo payment received, and **Mark ready** showed the ready alert and pickup code on the student's open page. HTTPS session flags and foreign-origin rejection were checked. The Cloudflare site and health endpoint still responded after the local Quick Tunnel and Mac demo server were stopped. Physical phone/iPad testing is still outstanding.

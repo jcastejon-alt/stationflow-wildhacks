@@ -7,3 +7,5 @@ data/
 *.tsbuildinfo
 .DS_Store
 artifacts/
+
+.wrangler/

@@ -11,7 +11,7 @@ export async function api<T>(path:string, options:RequestInit = {}):Promise<T> {
   try { response = await fetch(`/api${path}`, { ...options, signal:options.signal||controller.signal, headers: { 'Content-Type':'application/json', ...options.headers }, cache:'no-store' });
     data = await response.json().catch(() => null);
   }
-  catch { throw new ApiError('Connection lost. Check that the local demo server is running, then try again.', 0, 'OFFLINE'); }
+  catch { throw new ApiError('Connection lost. Check your internet connection and try again.', 0, 'OFFLINE'); }
   finally { clearTimeout(timeout); }
   if (response.status===401 && !['/auth/login','/auth/student'].includes(path) && requestAuthRevision===authRevision) window.dispatchEvent(new Event('stationflow:unauthorized'));
   if (!response.ok) throw new ApiError((data as {error?:{message?:string;code?:string}}|null)?.error?.message || `Request failed (${response.status}). Please try again.`, response.status, (data as {error?:{message?:string;code?:string}}|null)?.error?.code || 'UNKNOWN');

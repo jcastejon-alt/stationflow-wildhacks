@@ -64,7 +64,7 @@ export default function StaffLoginPage() {
         </button>
       </div>)}
     </div>
-    <p className="worker-entry-note">Local prototype · fictional orders and payment confirmation.</p>
+    <p className="worker-entry-note">Independent prototype · fictional orders and payment confirmation.</p>
     <details className="worker-manager-entry"><summary><LockKeyhole size={15} /> Manager / demo setup</summary>
       <form onSubmit={event => void enterManager(event)}>
         <label>Username<input value={managerName} autoComplete="username" disabled={busy} onChange={event => setManagerName(event.target.value)} required /></label>

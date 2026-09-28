@@ -36,12 +36,11 @@ export function validatePublicOrigin(value) {
   return parsed.origin;
 }
 
-export function createAuth({ db, fail, requiredString, exactKeys, realNow, allowedOrigins, publicOrigin }) {
+export function createAuth({ db, transact, fail, requiredString, exactKeys, realNow, allowedOrigins, publicOrigin, originCheckedAtEdge = false }) {
   db.exec(`CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, identifier TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, data TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), expires_at INTEGER NOT NULL);
     CREATE INDEX IF NOT EXISTS sessions_expiry ON sessions(expires_at);`);
-  db.exec('BEGIN IMMEDIATE');
-  try {
+  transact(() => {
     for (const { identifier, ...user } of demoUsers) {
       const existing = db.prepare('SELECT identifier,data FROM users WHERE id=?').get(user.id);
       if (!existing) db.prepare('INSERT INTO users(id,identifier,password_hash,data) VALUES (?,?,?,?)').run(user.id, identifier.toLowerCase(), hashPassword(user.disabledLogin ? randomBytes(32).toString('hex') : 'CampusDemo!26'), JSON.stringify(user));
@@ -56,15 +55,14 @@ export function createAuth({ db, fail, requiredString, exactKeys, realNow, allow
         db.prepare('UPDATE users SET data=? WHERE id=?').run(JSON.stringify(profile), user.id);
       }
     }
-    db.exec('COMMIT');
-  } catch (error) { db.exec('ROLLBACK'); throw error; }
+  });
   const dummyPassword = db.prepare('SELECT password_hash FROM users LIMIT 1').get().password_hash;
   const attempts = new Map();
   const cookieToken = (req) => {
     const value = (req.headers.cookie || '').split(';').map((part) => part.trim()).find((part) => part.startsWith(`${COOKIE}=`))?.slice(COOKIE.length + 1);
     return value && /^[A-Za-z0-9_-]{43}$/.test(value) ? value : null;
   };
-  const cookieOptions = (req) => ({ httpOnly: true, sameSite: 'strict', secure: Boolean(publicOrigin) || req.secure, path: '/', maxAge: SESSION_HOURS * 3600000 });
+  const cookieOptions = (req) => ({ httpOnly: true, sameSite: 'strict', secure: Boolean(publicOrigin) || req.secure || (originCheckedAtEdge && req.headers['x-stationflow-proto'] === 'https:'), path: '/', maxAge: SESSION_HOURS * 3600000 });
   const requireUser = (req) => { if (!req.user) fail(401, 'AUTH_REQUIRED', 'Sign in to your demo account to continue.'); return req.user; };
   const requireStudent = (req) => { const user = requireUser(req); if (user.role !== 'student') fail(403, 'STUDENT_REQUIRED', 'Use a demo student account for student ordering.'); return user; };
   const requireStaff = (req, stationId) => {
@@ -88,7 +86,7 @@ export function createAuth({ db, fail, requiredString, exactKeys, realNow, allow
       if (req.headers['sec-fetch-site'] === 'cross-site') fail(403, 'ORIGIN_FORBIDDEN', 'Cross-origin writes are not allowed.');
       if (publicOrigin) {
         if (origin !== publicOrigin) fail(403, 'ORIGIN_FORBIDDEN', 'Writes must come from the configured HTTPS demo origin.');
-      } else if (origin) {
+      } else if (origin && !originCheckedAtEdge) {
         let trusted = false;
         try { const parsed = new URL(origin); trusted = parsed.origin === `${req.protocol}://${req.get('host')}` || allowedOrigins.includes(parsed.origin); } catch {}
         if (!trusted) fail(403, 'ORIGIN_FORBIDDEN', 'Cross-origin writes are not allowed.');
@@ -113,13 +111,11 @@ export function createAuth({ db, fail, requiredString, exactKeys, realNow, allow
   const startSession = (req, res, row, metadata = {}) => {
     const oldToken = cookieToken(req);
     const token = randomBytes(32).toString('base64url');
-    db.exec('BEGIN IMMEDIATE');
-    try {
+    transact(() => {
       if (oldToken) db.prepare('DELETE FROM sessions WHERE token_hash=?').run(hashToken(oldToken));
       db.prepare('DELETE FROM sessions WHERE expires_at<=?').run(realNow());
       db.prepare('INSERT INTO sessions(token_hash,user_id,expires_at) VALUES (?,?,?)').run(hashToken(token), row.id, realNow() + SESSION_HOURS * 3600000);
-      db.exec('COMMIT');
-    } catch (error) { db.exec('ROLLBACK'); throw error; }
+    });
     attempts.delete(req.ip || 'local');
     res.cookie(COOKIE, token, cookieOptions(req));
     res.json({ user: JSON.parse(row.data), ...metadata });

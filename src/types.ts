@@ -1,0 +1,14 @@
+export type TimingMode = 'asap' | 'scheduled';
+export type Service = {open:boolean;acceptingOrders:boolean;canOrderNow?:boolean;canSchedule?:boolean;acceptingScheduled?:boolean;scheduledOpensAt?:string|null;scheduleEndsAt?:string|null;scheduleLabel?:string;label:string;closesAt:string|null;nextOpensAt:string|null;scheduleNote:string};
+export type DiningLocation = {id:string;name:string;building:string;description:string;hoursLabel:string;hoursSource:string;hoursNote:string};
+export type ServiceClock = {mode:string;now:string;label:string};
+export type Pricing = {amountCents:number|null;currency:'USD';status:'published'|'unverified'|'demo'|'meal_swipe'|'included';sourceUrl:string|null;note:string};
+export type Station = { physicalStationId?:string;queueGroupId?:string;locationId:string;service:Service;queue:{received:number;entered:number;preparing:number;ready:number;active:number}; id: string; name: string; location: string; description: string; paused: boolean; capacity: number; onlineCapacity: number };
+export type OptionGroup = { id: string; label: string; kind?:'customization'|'sauce'; min: number; max: number; options: { id: string; label: string; available: boolean }[] };
+export type MenuItem = { id: string; stationId: string; name: string; description: string; category: string; available: boolean; exchangeEligible: boolean; pricing?:Pricing; groups: OptionGroup[] };
+export type Slot = { id: string; startsAt: string; endsAt: string; remaining: number; totalRemaining: number; capacity: number; onlineCapacity: number; available: boolean };
+export type Status = 'received' | 'entered' | 'preparing' | 'ready' | 'picked_up' | 'cancelled';
+export type Payment = {status:'not_required'|'pending'|'approved'|'declined';method:'cafeteria_entry'|'campus_account'|'meal_exchange'|'counter';studentId?:string;authorized:boolean;updatedAt:string|null};
+export type OrderItem = {itemId:string;itemName:string;quantity:number;selectionSummary:{kind?:'customization'|'sauce';group:string;label:string;values:string[]}[];exclusions:string[];unitPricing?:Pricing};
+export type Order = { timingMode?:TimingMode;physicalStationId?:string;queueGroupId?:string;studentId?:string; simulated?:boolean; payment?:Payment; pricing?:Pricing; items?:OrderItem[]; id: string; token?: string; pickupCode: string; stationId: string; itemId: string; itemName: string; stationName: string; location: string; selectionSummary: {kind?:'customization'|'sauce';group:string; label:string; values:string[]}[]; exclusions:string[]; slot:Slot; status:Status; paymentMode:'regular'|'meal_exchange'; source:'online'|'walk_in'; createdAt:string; updatedAt:string; queueAhead:number; events:{status:Status;at:string}[] };
+export type Catalog = {locations:DiningLocation[];serviceClock:ServiceClock;stations:Station[]; items:MenuItem[]; demo:true};

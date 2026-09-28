@@ -1,0 +1,562 @@
+/* Campus places: distinct little destinations, with shared navigation and type. */
+.campus-places-grid.places-visual-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.place-v4-card {
+  --place-ink: #45265a;
+  --place-surface: #ece3ee;
+  --place-art: #e5d9e8;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  isolation: isolate;
+  color: #45265a;
+  background: #fffdf8;
+  border: 1px solid #e6dfd7;
+  border-radius: 22px;
+  box-shadow: 0 5px 0 #e8e0d642;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.place-v4-hub {
+  --place-ink: #674b2b;
+  --place-surface: #f1e2c7;
+  --place-art: #dfc9a4;
+}
+
+.place-v4-frothy {
+  --place-ink: #7a4b39;
+  --place-surface: #f1e0d6;
+  --place-art: #e8cbb9;
+}
+
+.place-v4-starbucks {
+  --place-ink: #3f604b;
+  --place-surface: #e2e9df;
+  --place-art: #c8d6c3;
+}
+
+.place-v4-card:hover,
+.station-v4-card:hover {
+  transform: translateY(-4px);
+  border-color: #c8b59b;
+  box-shadow: 0 13px 24px #45265a0c;
+}
+
+.place-v4-card:focus-visible,
+.station-v4-card:focus-visible,
+.cafeteria-visual .location-hours-details summary:focus-visible {
+  outline: 3px solid #45265a;
+  outline-offset: 5px;
+}
+
+.place-v4-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 182px;
+  overflow: hidden;
+  color: var(--place-ink);
+  background: var(--place-surface);
+  border-bottom: 1px solid #45265a0d;
+}
+
+.place-v4-art-caption {
+  position: absolute;
+  inset: 17px 19px auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .025em;
+}
+
+.place-v4-number {
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .07em;
+}
+
+.place-v4-symbol {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  margin-top: 23px;
+  background: #fffaf1e6;
+  border: 1px solid #fffdf4;
+  border-radius: 50%;
+  box-shadow: 6px 8px 0 #45265a0a;
+  transform: rotate(-9deg);
+  transition: transform 180ms ease;
+}
+
+.place-v4-orbit {
+  position: absolute;
+  width: 176px;
+  height: 176px;
+  margin-top: 40px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: .15;
+}
+
+.place-v4-orbit::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+}
+
+.place-v4-art-detail {
+  position: absolute;
+  right: 21px;
+  bottom: 23px;
+  width: 11px;
+  height: 11px;
+  background: var(--place-ink);
+  border-radius: 50%;
+  opacity: .35;
+}
+
+.place-v4-hub .place-v4-art {
+  background: linear-gradient(150deg, var(--place-surface) 60%, #e5cfab 60%);
+}
+
+.place-v4-hub .place-v4-symbol {
+  border-radius: 23px;
+  transform: rotate(9deg);
+}
+
+.place-v4-hub .place-v4-orbit {
+  width: 154px;
+  height: 133px;
+  border-radius: 27px;
+  transform: rotate(-12deg);
+}
+
+.place-v4-hub .place-v4-art-detail {
+  left: 25px;
+  right: auto;
+  border-radius: 2px;
+  transform: rotate(14deg);
+}
+
+.place-v4-frothy .place-v4-symbol {
+  width: 103px;
+  height: 119px;
+  border-radius: 55px 55px 18px 18px;
+  transform: rotate(-5deg);
+}
+
+.place-v4-frothy .place-v4-orbit {
+  width: 158px;
+  height: 179px;
+  margin-top: 65px;
+  border-radius: 85px 85px 0 0;
+  background: var(--place-art);
+  opacity: .45;
+}
+
+.place-v4-frothy .place-v4-art-detail {
+  width: 24px;
+  height: 2px;
+  right: 23px;
+  bottom: 30px;
+  box-shadow: 0 6px 0 currentColor;
+  transform: rotate(-28deg);
+}
+
+.place-v4-starbucks .place-v4-symbol {
+  width: 128px;
+  height: 99px;
+  border-radius: 48% 52% 46% 54%;
+  transform: rotate(8deg);
+}
+
+.place-v4-starbucks .place-v4-orbit {
+  width: 215px;
+  height: 114px;
+  transform: rotate(-32deg);
+}
+
+.place-v4-starbucks .place-v4-art-detail {
+  width: 14px;
+  height: 23px;
+  border-radius: 14px 1px 14px 1px;
+  bottom: 23px;
+  left: 26px;
+  right: auto;
+  transform: rotate(-17deg);
+}
+
+.place-v4-card:hover .place-v4-symbol { transform: rotate(0); }
+
+.place-v4-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding: 23px 21px 13px;
+}
+
+.place-v4-state {
+  display: inline-flex;
+  align-items: flex-start;
+  align-self: flex-start;
+  gap: 6px;
+  min-height: 18px;
+  color: #4e6d51;
+  font-size: 11px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.place-v4-status-dot {
+  display: inline-block;
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  margin-top: 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.place-v4-state.is-closed { color: #876638; }
+
+.place-v4-body h2,
+.station-v4-body h2 {
+  margin: 12px 0 11px;
+  color: #45265a;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 33px;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  font-weight: 400;
+}
+
+.place-v4-body > p {
+  min-height: 44px;
+  margin: 0 0 21px;
+  color: #796f70;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.place-v4-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 19px;
+}
+
+.place-v4-details > span,
+.station-v4-details > span {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: #766b70;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.place-v4-details svg,
+.station-v4-details svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: .8;
+}
+
+.place-v4-details .place-v4-hours { color: #543e5e; }
+.place-v4-details .place-v4-queue { color: #766b70; }
+
+.place-v4-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 52px;
+  border-top: 1px solid #e9e1d9;
+  color: #45265a;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.place-v4-action > span {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: var(--place-surface, #efe8d9);
+  color: var(--place-ink, #45265a);
+  border-radius: 50%;
+  transition: transform 180ms ease;
+}
+
+.place-v4-card:hover .place-v4-action > span,
+.station-v4-card:hover .place-v4-action > span { transform: translateX(3px); }
+
+/* Inside the dining hall, each station gets room to introduce itself. */
+.cafeteria-stations-grid.stations-visual-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.station-v4-card {
+  --place-ink: #715735;
+  --place-surface: #efe0c4;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e3d9c9;
+  border-radius: 22px;
+  background: #fffdf8;
+  color: #45265a;
+  text-decoration: none;
+  box-shadow: 0 5px 0 #e8e0d642;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.station-v4-sandwich {
+  --place-ink: #4e6851;
+  --place-surface: #e0e6d7;
+  border-color: #dce1d4;
+}
+
+.station-v4-hamburger {
+  --place-ink: #77503d;
+  --place-surface: #ebd6c5;
+}
+
+.station-physical-label {
+  display: block;
+  margin-top: 18px;
+  color: #79644d;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  line-height: 1.5;
+}
+
+.station-menu-schedule {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 20px;
+  padding: 13px 15px;
+  border: 1px solid #dfd6c9;
+  border-radius: 11px;
+  background: #f8f4eb;
+}
+
+.station-menu-schedule > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 3px 14px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #766b70;
+}
+
+.station-menu-schedule strong { font-weight: 500; }
+.station-menu-schedule .current-menu { color: #45265a; }
+.station-menu-schedule .current-menu strong { font-weight: 700; }
+
+.station-v4-art {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 200px;
+  padding: 35px;
+  overflow: hidden;
+  background: var(--place-surface);
+  color: var(--place-ink);
+}
+
+.station-v4-art::before {
+  content: '';
+  position: absolute;
+  right: -51px;
+  bottom: -126px;
+  width: 310px;
+  height: 310px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 0 15px #fffaf02b, 0 0 0 16px #71573516;
+  opacity: .25;
+}
+
+.station-v4-number {
+  position: absolute;
+  top: 22px;
+  left: 28px;
+  color: var(--place-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+
+.station-v4-symbol {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  margin-top: 9px;
+  flex-shrink: 0;
+  border: 1px solid #fffdf4;
+  border-radius: 50%;
+  background: #fffaf0d9;
+  box-shadow: 7px 7px 0 #71573509;
+  transform: rotate(-7deg);
+}
+
+.station-v4-sandwich .station-v4-symbol {
+  border-radius: 37px;
+  transform: rotate(7deg);
+}
+
+.station-v4-art-label {
+  position: relative;
+  max-width: 155px;
+  margin-right: 6px;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 27px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -.5px;
+}
+
+.station-v4-body { padding: 26px 30px 15px; }
+.station-v4-body h2 { margin-top: 13px; font-size: 35px; }
+.station-v4-body > p { min-height: 42px; margin: 12px 0 22px; color: #796f70; font-size: 14px; line-height: 1.65; }
+.station-v4-details { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 21px; }
+.station-v4-body .place-v4-action { min-height: 56px; font-size: 13px; }
+
+.cafeteria-visual .cafeteria-entry-banner {
+  align-items: center;
+  padding: 17px 21px;
+  margin-bottom: 26px;
+  color: #62715a;
+  border-color: #dce3d1;
+  border-radius: 14px;
+  background: #eef1e7;
+  font-size: 13px;
+}
+
+.cafeteria-visual .cafeteria-entry-banner > svg { flex-shrink: 0; }
+.cafeteria-visual .cafeteria-entry-banner strong { color: #4f644b; }
+.cafeteria-visual .location-hours-details { margin-top: 28px; padding: 7px 20px; border-radius: 14px; border-color: #e4dcd3; background: #fffaf3; }
+.cafeteria-visual .location-hours-details summary { min-height: 48px; color: #66516d; font-size: 13px; }
+.cafeteria-visual .location-hours-details p { color: #766b70; font-size: 13px; }
+.cafeteria-visual .location-hours-details .text-button { color: #45265a; font-size: 12px; }
+
+@media (max-width: 1120px) and (min-width: 861px) {
+  .campus-places-grid.places-visual-grid { gap: 13px; }
+  .place-v4-body { padding: 21px 16px 11px; }
+  .place-v4-body h2 { font-size: 29px; }
+  .place-v4-art-caption { inset: 15px 15px auto; font-size: 9px; }
+  .place-v4-body > p { font-size: 12px; }
+  .station-v4-art { padding: 29px; gap: 20px; }
+  .station-v4-symbol { width: 116px; height: 116px; }
+  .station-v4-art-label { font-size: 25px; }
+}
+
+@media (max-width: 860px) {
+  .campus-places-grid.places-visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .place-v4-art { height: 172px; }
+  .place-v4-body { padding: 22px 22px 13px; }
+  .place-v4-body > p { min-height: 42px; }
+  .cafeteria-stations-grid.stations-visual-grid { gap: 20px; }
+  .station-v4-art { padding: 28px 20px; gap: 14px; min-height: 180px; }
+  .station-v4-symbol { width: 96px; height: 96px; }
+  .station-v4-symbol > svg { width: 62px; height: 62px; }
+  .station-v4-art-label { font-size: 24px; }
+  .station-v4-body { padding: 23px 23px 12px; }
+  .station-v4-body h2 { font-size: 30px; }
+  .station-v4-body > p { min-height: 67px; font-size: 13px; }
+}
+
+@media (max-width: 600px) {
+  .campus-places-grid.places-visual-grid { gap: 13px; }
+  .place-v4-card { border-radius: 17px; }
+  .place-v4-art { height: 133px; }
+  .place-v4-art-caption { inset: 11px 13px auto; font-size: 8px; gap: 5px; }
+  .place-v4-number { font-size: 10px; }
+  .place-v4-symbol { width: 78px; height: 78px; margin-top: 18px; }
+  .place-v4-symbol > svg { width: 45px; height: 45px; }
+  .place-v4-orbit { width: 119px; height: 119px; margin-top: 29px; }
+  .place-v4-orbit::after { inset: -8px; }
+  .place-v4-art-detail { width: 7px; height: 7px; right: 14px; bottom: 17px; }
+  .place-v4-hub .place-v4-symbol { border-radius: 17px; }
+  .place-v4-hub .place-v4-orbit { width: 110px; height: 94px; border-radius: 23px; }
+  .place-v4-hub .place-v4-art-detail { left: 17px; }
+  .place-v4-frothy .place-v4-symbol { width: 75px; height: 84px; border-radius: 45px 45px 12px 12px; }
+  .place-v4-frothy .place-v4-orbit { width: 112px; height: 129px; margin-top: 58px; }
+  .place-v4-frothy .place-v4-art-detail { width: 16px; right: 17px; bottom: 23px; }
+  .place-v4-starbucks .place-v4-symbol { width: 91px; height: 73px; }
+  .place-v4-starbucks .place-v4-orbit { width: 157px; height: 90px; }
+  .place-v4-starbucks .place-v4-art-detail { width: 10px; height: 17px; bottom: 20px; left: 18px; }
+  .place-v4-body { padding: 16px 14px 7px; }
+  .place-v4-state { font-size: 11px; min-height: 17px; gap: 5px; }
+  .place-v4-body h2 { margin: 11px 0 9px; font-size: 27px; letter-spacing: -1px; }
+  .place-v4-body > p { margin-bottom: 16px; min-height: 55px; font-size: 12px; line-height: 1.5; }
+  .place-v4-details { gap: 9px; padding-bottom: 14px; }
+  .place-v4-details > span { font-size: 12px; line-height: 1.45; gap: 5px; }
+  .place-v4-details svg { width: 12px; height: 12px; }
+  .place-v4-details .place-v4-queue { display: none; }
+  .place-v4-action { min-height: 48px; font-size: 11px; gap: 3px; }
+  .place-v4-action > span { width: 25px; height: 25px; }
+  .place-v4-action svg { width: 15px; height: 15px; }
+  .cafeteria-stations-grid.stations-visual-grid { grid-template-columns: 1fr; gap: 20px; }
+  .station-v4-art { min-height: 172px; padding: 27px 28px; gap: 25px; }
+  .station-v4-number { top: 17px; left: 22px; }
+  .station-v4-symbol { width: 111px; height: 111px; margin-top: 7px; }
+  .station-v4-symbol > svg { width: 70px; height: 70px; }
+  .station-v4-art-label { max-width: 129px; font-size: 26px; }
+  .station-v4-body { padding: 23px 24px 12px; }
+  .station-v4-body h2 { font-size: 33px; }
+  .station-v4-body > p { min-height: 0; margin-bottom: 18px; font-size: 14px; }
+  .station-v4-details { gap: 9px 18px; margin-bottom: 14px; }
+  .station-v4-body .place-v4-action { font-size: 13px; min-height: 52px; }
+  .station-v4-body .place-v4-action > span { width: 30px; height: 30px; }
+  .cafeteria-visual .cafeteria-entry-banner { align-items: flex-start; padding: 15px 17px; font-size: 12px; }
+  .cafeteria-visual .location-hours-details { padding: 6px 17px; }
+}
+
+@media (max-width: 350px) {
+  .campus-places-grid.places-visual-grid { grid-template-columns: 1fr; }
+  .place-v4-body > p { min-height: 0; }
+  .place-v4-art-caption { font-size: 10px; }
+  .place-v4-body h2 { font-size: 32px; }
+  .station-v4-art-label { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .place-v4-card,
+  .station-v4-card,
+  .place-v4-symbol,
+  .place-v4-action > span { transition: none; }
+  .place-v4-card:hover,
+  .station-v4-card:hover { transform: none; }
+}

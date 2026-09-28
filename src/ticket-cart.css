@@ -1,0 +1,34 @@
+.ticket-flow .progress-track { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ticket-flow .progress-track.retail-progress { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.ticket-flow .progress-track li.complete:not(.connected)::before { background: #e2d9e5; }
+.ticket-flow .entered-announcement {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 17px;
+  padding: 20px 23px;
+  border: 1px solid #e4d3ac;
+  border-radius: 13px;
+  background: #f8f0da;
+  color: #705632;
+}
+.ticket-flow .entered-announcement > svg { flex: none; }
+.ticket-flow .entered-announcement > div { display: grid; gap: 6px; }
+.ticket-flow .entered-announcement strong { font-size: 16px; }
+.ticket-flow .entered-announcement span { font-size: 12px; line-height: 1.5; }
+.ticket-flow .ticket-items { display: grid; gap: 15px; margin-top: 12px; }
+.ticket-flow .ticket-item { min-width: 0; padding: 18px; border: 1px solid #e8e0d5; border-radius: 12px; background: #fffdf9; }
+.ticket-flow .ticket-order-detail .ticket-item h2 { display: flex; align-items: baseline; gap: 11px; margin: 0 0 11px; font-size: 25px; overflow-wrap: anywhere; }
+.ticket-flow .ticket-item-quantity { flex: none; color: #795b84; font-family: 'Rethink Sans', sans-serif; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ticket-flow .ticket-item .ticket-detail-line:last-of-type { border-bottom: 0; }
+.ticket-flow .ticket-item .ticket-exclusions { margin: 11px 0 0; }
+.ticket-flow .ticket-order-total { margin-top: 18px; border-top: 1px solid #e8e0d5; font-weight: 700; }
+.ticket-flow .ticket-order-total strong { font-weight: 700; }
+.my-orders-flow .order-history-main h2 { overflow-wrap: anywhere; }
+@media (max-width: 500px) {
+  .ticket-flow .entered-announcement { padding: 17px; }
+  .ticket-flow .entered-announcement strong { font-size: 14px; }
+  .ticket-flow .entered-announcement span { font-size: 11px; }
+  .ticket-flow .ticket-item { padding: 14px; }
+  .ticket-flow .ticket-order-detail .ticket-item h2 { font-size: 22px; }
+}
